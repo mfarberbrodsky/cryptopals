@@ -19,7 +19,7 @@ def encrypt_aes_cbc(pt: bytes, key: bytes, iv: bytes) -> bytes:
         prev_block = ct[-16:]
     ct += encryptor.finalize()
 
-    return ct
+    return bytes(ct)
 
 
 def decrypt_aes_cbc(ct: bytes, key: bytes, iv: bytes) -> bytes:

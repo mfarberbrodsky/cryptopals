@@ -2,6 +2,13 @@ import os
 import base64
 
 from cryptography.hazmat.primitives.ciphers import Cipher, algorithms, modes
+from task9 import pkcs7_pad
+
+
+def encrypt_aes_ecb(pt: bytes, key: bytes) -> bytes:
+    cipher = Cipher(algorithms.AES(key), modes.ECB())
+    encryptor = cipher.encryptor()
+    return encryptor.update(pkcs7_pad(pt, (len(pt)//16 + 1)*16)) + encryptor.finalize()
 
 
 def decrypt_aes_ecb(ct: bytes, key: bytes) -> bytes:
