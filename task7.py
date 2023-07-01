@@ -5,7 +5,7 @@ from cryptography.hazmat.primitives.ciphers import Cipher, algorithms, modes
 
 
 def decrypt_aes_ecb(ct: bytes, key: bytes) -> bytes:
-    cipher = cipher = Cipher(algorithms.AES(key), modes.ECB())
+    cipher = Cipher(algorithms.AES(key), modes.ECB())
     decryptor = cipher.decryptor()
     return decryptor.update(ct) + decryptor.finalize()
 
