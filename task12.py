@@ -17,9 +17,9 @@ def ecb_oracle(pt: bytes) -> bytes:
 
 def decrypt_simple(oracle: Callable[[bytes], bytes]) -> bytes:
     padding_len = 1
-    prev_len = len(ecb_oracle(b""))
+    prev_len = len(oracle(b""))
     while True:
-        curr_len = len(ecb_oracle(b"A" * padding_len))
+        curr_len = len(oracle(b"A" * padding_len))
         if curr_len > prev_len:
             block_size = curr_len - prev_len
             break
@@ -27,17 +27,17 @@ def decrypt_simple(oracle: Callable[[bytes], bytes]) -> bytes:
 
     assert is_ecb(b"A" * (2 * block_size))
 
-    secret_len = len(ecb_oracle(b"")) - padding_len
+    secret_len = len(oracle(b"")) - padding_len
     secret = bytearray(secret_len)
 
     for i in range(secret_len):
-        ith_byte_block = ecb_oracle(b"A" * (block_size - (i % block_size) - 1))[
+        ith_byte_block = oracle(b"A" * (block_size - (i % block_size) - 1))[
             block_size * (i // block_size) : block_size * (i // block_size + 1)
         ]
 
         # for i < block_size, we're looking at AAAA || secret || byte, for the others we don't need AAA prefix, just the prev block_size-1 secret bytes
         possible_blocks = {
-            ecb_oracle(
+            oracle(
                 (b"A" * block_size + secret)[i + 1 : i + block_size] + bytes([byte])
             )[:block_size]: byte
             for byte in range(256)
