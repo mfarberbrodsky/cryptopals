@@ -8,8 +8,12 @@ def single_byte_xor_score(ct: bytes) -> float:
 
 
 if __name__ == "__main__":
-    strings = [bytes.fromhex(s) for s in open(os.path.join(
-        os.path.dirname(__file__), "data/task4.txt")).read().splitlines()]
+    strings = [
+        bytes.fromhex(s)
+        for s in open(os.path.join(os.path.dirname(__file__), "data/task4.txt"))
+        .read()
+        .splitlines()
+    ]
 
     best_string = min(strings, key=single_byte_xor_score)
     print(best_string, single_byte_xor(best_string))

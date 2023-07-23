@@ -36,12 +36,17 @@ def decrypt_simple(oracle: Callable[[bytes], bytes]) -> bytes:
         ]
 
         # for i < block_size, we're looking at AAAA || secret || byte, for the others we don't need AAA prefix, just the prev block_size-1 secret bytes
-        possible_blocks = {ecb_oracle((b"A"*block_size + secret)[i+1:i+block_size] + bytes([byte]))[:block_size]: byte for byte in range(256)}
+        possible_blocks = {
+            ecb_oracle(
+                (b"A" * block_size + secret)[i + 1 : i + block_size] + bytes([byte])
+            )[:block_size]: byte
+            for byte in range(256)
+        }
         secret[i] = possible_blocks[ith_byte_block]
-    
+
     return bytes(secret)
 
 
 if __name__ == "__main__":
     assert decrypt_simple(ecb_oracle) == SECRET
-    print(decrypt_simple(ecb_oracle).decode('utf-8'))
+    print(decrypt_simple(ecb_oracle).decode("utf-8"))

@@ -18,7 +18,7 @@ def encryption_oracle(pt: bytes) -> bytes:
 
 
 def is_ecb_oracle(oracle: Callable[[bytes], bytes]) -> bool:
-    return is_ecb(oracle(b"\x00"*32))
+    return is_ecb(oracle(b"\x00" * 32))
 
 
 if __name__ == "__main__":
